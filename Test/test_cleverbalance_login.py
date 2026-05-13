@@ -19,6 +19,24 @@ def test_cleverbalance_login():
         # Click View all
         page.get_by_text("View all").click()
 
-        page.pause()
+        # Click New reconciliation
+         #page.locator("text=+ New reconciliation").click()
+        page.get_by_text("New reconciliation").click()
+
+
+        # Open reconciliation dropdown
+      #  page.get_by_text("Choose reconciliation type...").click()
+
+        # Select Bank reconciliation
+      #  page.get_by_text("Bank reconciliation").click()
+       # page.get_by_role("combobox", name="All types").click()
+      # Select Bank reconciliation
+   # page.locator("text=Bank reconciliation").first.click()
+
+    page.get_by_text("Choose reconciliation type...").click()
+    page.get_by_text("Bank reconciliation", exact=True).click()
+
+    page.pause()
+  
 
 test_cleverbalance_login()
