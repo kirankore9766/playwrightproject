@@ -1,42 +1,32 @@
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import expect, sync_playwright
 
-def test_cleverbalance_login():
+CLEVERBALANCE_URL = "https://app.cleverbalance.ai/"
+EMAIL = "kirankore057@gmail.com"
+PASSWORD = "Pass@9766"
+
+
+def test_first_bank_reconciliation():
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=False, slow_mo=500)
         page = browser.new_page()
 
-        page.goto("https://app.cleverbalance.ai/")
+        page.goto(CLEVERBALANCE_URL)
 
-        # Login
-        page.get_by_placeholder("Enter your email").fill("kirankore057@gmail.com")
-        page.get_by_placeholder("Minimum 8 characters").fill("Pass@9766")
-
+        page.get_by_placeholder("Enter your email").fill(EMAIL)
+        page.get_by_placeholder("Minimum 8 characters").fill(PASSWORD)
         page.get_by_role("button", name="Login").click()
 
-        # Wait until dashboard loads
         page.wait_for_load_state("networkidle")
 
-        # Click View all
         page.get_by_text("View all").click()
-
-        # Click New reconciliation
-         #page.locator("text=+ New reconciliation").click()
         page.get_by_text("New reconciliation").click()
 
+        page.wait_for_url("**/products/reconciliation/new**", timeout=60000)
+        expect(page.get_by_role("heading", name="New reconciliation")).to_be_visible()
 
-        # Open reconciliation dropdown
-      #  page.get_by_text("Choose reconciliation type...").click()
+        page.get_by_text("Choose reconciliation type").click()
+        page.get_by_text("Bank reconciliation", exact=True).click()
 
-        # Select Bank reconciliation
-      #  page.get_by_text("Bank reconciliation").click()
-       # page.get_by_role("combobox", name="All types").click()
-      # Select Bank reconciliation
-   # page.locator("text=Bank reconciliation").first.click()
+        expect(page.get_by_text("Bank statement vs books")).to_be_visible()
 
-    page.get_by_text("Choose reconciliation type...").click()
-    page.get_by_text("Bank reconciliation", exact=True).click()
-
-    page.pause()
-  
-
-test_cleverbalance_login()
+        browser.close()
