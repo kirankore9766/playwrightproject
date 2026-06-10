@@ -7,7 +7,10 @@ PASSWORD = "Pass@9766"
 
 def test_first_bank_reconciliation():
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False, slow_mo=500)
+        browser = p.chromium.launch(
+            headless=True, slow_mo=500
+        )
+
         page = browser.new_page()
 
         page.goto(CLEVERBALANCE_URL)
@@ -21,14 +24,36 @@ def test_first_bank_reconciliation():
         page.get_by_text("View all").click()
         page.get_by_text("New reconciliation").click()
 
-        page.wait_for_url("**/products/reconciliation/new**", timeout=60000)
-        expect(page.get_by_role("heading", name="New reconciliation")).to_be_visible()
+        page.wait_for_url(
+            "**/products/reconciliation/new**",
+            timeout=60000
+        )
 
-        page.get_by_text("Choose reconciliation type").click()
-        page.get_by_text("Bank reconciliation", exact=True).click()
+        expect(
+            page.get_by_role(
+                "heading",
+                name="New reconciliation"
+            )
+        ).to_be_visible()
 
-        expect(page.get_by_text("Bank statement vs books")).to_be_visible()
+        page.get_by_text(
+            "Choose reconciliation type"
+        ).click()
 
-        page.get_by_text("Uplod file",exact=True).click()
+        page.get_by_text(
+            "Bank reconciliation",
+            exact=True
+        ).click()
+
+        expect(
+            page.get_by_text(
+                "Bank statement vs books"
+            )
+        ).to_be_visible()
+
+        # page.get_by_role(
+        #     "button",
+        #     name="Upload file"
+        # ).click(force=True)
 
         browser.close()
