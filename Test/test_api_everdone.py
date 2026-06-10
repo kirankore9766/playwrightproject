@@ -1,29 +1,26 @@
 import requests
 
-#def test_get_user():
- #   response = requests.get("https://app.everdone.ai/login")
-  #  assert response.status_code == 200
-
- 
-
-# def test_get_user():
-#     response = requests.get("https://app.everdone.ai/login")
-#     assert response.status_code == 200
-
 
 def test_create_user():
+
+    url = "https://reqres.in/api/users"   # Sample API for testing
 
     payload = {
         "name": "Kiran",
         "job": "QA Engineer"
     }
 
+    headers = {
+        "Content-Type": "application/json"
+    }
+
     response = requests.post(
-        "https://app.everdone.ai/login",
-        json=payload
+        url,
+        json=payload,
+        headers=headers
     )
 
-    print(response.status_code)
-    print(response.text)
+    print("Status Code:", response.status_code)
+    print("Response:", response.json())
 
-    assert response.status_code in [200, 201, 400]
+    assert response.status_code == 201

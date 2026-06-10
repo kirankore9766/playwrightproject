@@ -29,4 +29,6 @@ def test_first_bank_reconciliation():
 
         expect(page.get_by_text("Bank statement vs books")).to_be_visible()
 
+        page.get_by_text("Uplod file",exact=True).click()
+
         browser.close()
